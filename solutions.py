@@ -9,7 +9,6 @@ def question1(s, t):
     string = {}
     count = 0
     if len(t) == 0:
-        print "No string provided"
         return False
 
     for letter in s:
@@ -18,36 +17,33 @@ def question1(s, t):
     for letter in t:
         for key in string:
             if string.get(letter) is None:
-                print 'Letter does not exist'
                 return False
             else:
                 if key == letter:
                     if string[letter] <= 0:
-                        print "Insufficient letters"
                         return False
                     else:
                         string[letter] -= 1
                         break
-    print "TRUE"
     return True
 
 
-# # Should be True
-# s = "udacity"
-# t = "uc"
-# question1(s, t)
-# # Should be False: insufficient letters
-# s = "udacity"
-# t = "uu"
-# question1(s, t)
-# # Should be False: foreign letter
-# s = "udacity"
-# t = "az"
-# question1(s, t)
-# # Should be False: no string provided
-# s = "udacity"
-# t = ""
-# question1(s, t)
+# Should be True
+s = "udacity"
+t = "uc"
+print question1(s, t)
+# Should be False: insufficient letters
+s = "udacity"
+t = "uu"
+print question1(s, t)
+# Should be False: foreign letter
+s = "udacity"
+t = "az"
+print question1(s, t)
+# Should be False: no string provided
+s = "udacity"
+t = ""
+print question1(s, t)
 
 # Question 2
 # Given a string a, find the longest palindromic substring contained in a.
@@ -55,23 +51,43 @@ def question1(s, t):
 
 
 def question2(a):
-    palindrome = ""
+    longest = ""
+    current = ""
+    data = {}
+
+    for index in range(len(a)):
+        check = palindrome(a[index:len(a)])
+        if check:
+            current = a[index:len(a)]
+            if len(current) > len(longest):
+                longest = current
+        else:
+            current = question2(a[index:len(a) - 1])
+            if len(current) > len(longest):
+                longest = current
+    return longest
+
+
+def palindrome(a):
     if a == "":
         return True
     else:
         if a[0] == a[-1]:
-            check = question2(a[1:-1])
-            if check:
-                palindrome = a[:]
-                return palindrome
+            return palindrome(a[1:-1])
         else:
-            check = question2(a[0:-1])
-            if check:
-                palindrome = a[0:-1]
-                return palindrome
-    return "No palindromes found"
+            return False
 
-a = "abadba"
+# Should be 'ababa'
+a = "ababa"
+print question2(a)
+# Should be 'ababa'
+a = "ababad"
+print question2(a)
+# Should be 'aba'
+a = "ababda"
+print question2(a)
+# Should be 'rotor'
+a = "rotoring"
 print question2(a)
 
 # Question 3
