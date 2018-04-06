@@ -28,22 +28,22 @@ def question1(s, t):
     return True
 
 
-# Should be True
-s = "udacity"
-t = "uc"
-print question1(s, t)
-# Should be False: insufficient letters
-s = "udacity"
-t = "uu"
-print question1(s, t)
-# Should be False: foreign letter
-s = "udacity"
-t = "az"
-print question1(s, t)
-# Should be False: no string provided
-s = "udacity"
-t = ""
-print question1(s, t)
+# # Should be True
+# s = "udacity"
+# t = "uc"
+# print question1(s, t)
+# # Should be False: insufficient letters
+# s = "udacity"
+# t = "uu"
+# print question1(s, t)
+# # Should be False: foreign letter
+# s = "udacity"
+# t = "az"
+# print question1(s, t)
+# # Should be False: no string provided
+# s = "udacity"
+# t = ""
+# print question1(s, t)
 
 # Question 2
 # Given a string a, find the longest palindromic substring contained in a.
@@ -77,18 +77,18 @@ def palindrome(a):
         else:
             return False
 
-# Should be 'ababa'
-a = "ababa"
-print question2(a)
-# Should be 'ababa'
-a = "ababad"
-print question2(a)
-# Should be 'aba'
-a = "ababda"
-print question2(a)
-# Should be 'rotor'
-a = "rotoring"
-print question2(a)
+# # Should be 'ababa'
+# a = "ababa"
+# print question2(a)
+# # Should be 'ababa'
+# a = "ababad"
+# print question2(a)
+# # Should be 'aba'
+# a = "ababda"
+# print question2(a)
+# # Should be 'rotor'
+# a = "rotoring"
+# print question2(a)
 
 # Question 3
 # Given an undirected graph G, find the minimum spanning tree within G.
@@ -103,8 +103,75 @@ print question2(a)
 # The function definition should be question3(G)
 
 
+class Node(object):
+    def __init__(self, value):
+        self.value = value
+        self.edges = []
+
+
+class Edge(object):
+    def __init__(self, value, node_from, node_to):
+        self.value = value
+        self.node_from = node_from
+        self.node_to = node_to
+
+
+class Graph(object):
+    def __init__(self, nodes=[], edges=[]):
+        self.nodes = nodes
+        self.edges = edges
+
+    def insert_edge(self, new_edge_val, node_A_val, node_B_val):
+        node_A = None
+        node_B = None
+        for node in self.nodes:
+            if node_A_val == node.value:
+                node_A = node
+            if node_B_val == node.value:
+                node_B = node
+        if node_A is None:
+            node_A = Node(node_A_val)
+            self.nodes.append(node_A)
+        if node_B is None:
+            node_B = Node(node_B_val)
+            self.nodes.append(node_B)
+        AB_edge = Edge(new_edge_val, node_A, node_B)
+        node_A.edges.append(AB_edge)
+        node_B.edges.append(AB_edge)
+        self.edges.append(AB_edge)
+
+        BA_edge = Edge(new_edge_val, node_B, node_A)
+        node_A.edges.append(BA_edge)
+        node_B.edges.append(BA_edge)
+        self.edges.append(BA_edge)
+
+    def insert_node(self, new_node_val):
+        new_node = Node(new_node_val)
+        self.nodes.append(new_node)
+
+    def get_edge_list(self):
+        list = []
+        for edge_obj in self.edges:
+            edge = [edge_obj.value, edge_obj.node_from.value, edge_obj.node_to.value]
+            list.append(edge)
+        return list
+
+
 def question3(G):
-    return
+    print G.get_edge_list()
+
+
+G = Graph()
+G.insert_edge(2, "A", "B")
+G.insert_edge(5, "B", "C")
+G.insert_edge(3, "B", "D")
+G.insert_edge(1, "C", "D")
+
+print question3(G)
+
+
+
+
 
 # Question 4
 # Find the least common ancestor between two nodes on a binary search tree.
