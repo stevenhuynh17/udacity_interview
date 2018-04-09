@@ -137,13 +137,11 @@ class Graph(object):
             self.nodes.append(node_B)
         AB_edge = Edge(new_edge_val, node_A, node_B)
         node_A.edges.append(AB_edge)
-        node_B.edges.append(AB_edge)
         self.edges.append(AB_edge)
 
-        BA_edge = Edge(new_edge_val, node_B, node_A)
-        node_A.edges.append(BA_edge)
-        node_B.edges.append(BA_edge)
-        self.edges.append(BA_edge)
+        # BA_edge = Edge(new_edge_val, node_B, node_A)
+        # node_A.edges.append(BA_edge)
+        # self.edges.append(BA_edge)
 
     def insert_node(self, new_node_val):
         new_node = Node(new_node_val)
@@ -158,18 +156,33 @@ class Graph(object):
 
 
 def question3(G):
-    print G.get_edge_list()
+    # Build the graph
+    setup = Graph()
+    for node in G:
+        for tuple in G[node]:
+            nodeA = node
+            nodeB = tuple[0]
+            value = tuple[1]
+            setup.insert_edge(value, nodeA, nodeB)
 
+    adjacency_list = {}
+    # Select a random node, probably the first one
+    # See all available edges and pick the one with the least value
+    # Move to that new node and list all untaken edges with the nodes selected so far
+    nodes = setup.nodes
+    nodes[0].edges
+    # nodes[0].edges[0]
+    # nodes[0].edges[1]
+    return adjacency_list
 
-G = Graph()
-G.insert_edge(2, "A", "B")
-G.insert_edge(5, "B", "C")
-G.insert_edge(3, "B", "D")
-G.insert_edge(1, "C", "D")
+G = {
+        'A': [('B', 2)],
+        'B': [('A', 2), ('C', 5)],
+        'C': [('B', 5)]
+    }
+
 
 print question3(G)
-
-
 
 
 
@@ -209,12 +222,86 @@ def question4():
 # "mth number from the end". You should copy/paste the Node class below to use
 # as a representation of a node in the linked list. Return the value of the node
 # at that position.
-#
-# class Node(object):
-#   def __init__(self, data):
-#     self.data = data
-#     self.next = None
 
 
-def question5():
-    return
+class List_Node(object):
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+class LinkedList(object):
+    def __init__(self, head=None):
+        self.head = head
+
+    def append(self, new_element):
+        current = self.head
+        if self.head:
+            while current.next:
+                current = current.next
+            current.next = new_element
+        else:
+            self.head = new_element
+
+    def insert(self, new_element, position):
+        upper_bound = self.get_position(position)
+        lower_bound = self.get_position(position - 1)
+
+        lower_bound.next = new_element
+        new_element.next = upper_bound
+
+    def get_position(self, position):
+        element = self.head
+        if self.head:
+            while position > 1:
+                element = element.next
+                position -= 1
+            return element
+        else:
+            return None
+
+    def list_count(self):
+        count = 0
+        element = self.head
+        if self.head:
+            count = 1
+            while element.next is not None:
+                count += 1
+                element = element.next
+            return count
+        else:
+            return count
+
+
+def test_ll(start, end):
+    ll = LinkedList()
+    for value in range(start, end):
+        element = List_Node(value)
+        ll.append(element)
+    return ll
+
+
+def question5(ll, m):
+    length = ll.list_count()
+    if m > length:
+        return None
+    elif m == 0:
+        return None
+    return ll.get_position(length - m + 1).value
+
+
+# Should return 3
+ll = test_ll(1, 7)
+m = 3
+print question5(ll, m)
+# Should return 5
+ll = test_ll(1, 8)
+m = 3
+print question5(ll, m)
+# Should return None
+ll = test_ll(1, 7)
+m = 10
+print question5(ll, m)
+# Should return None
+ll = test_ll(1, 7)
+m = 0
+print question5(ll, m)
