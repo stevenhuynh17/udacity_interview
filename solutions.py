@@ -182,24 +182,25 @@ G = {
     }
 
 
-print question3(G)
-
+# print question3(G)
 
 
 # Question 4
 # Find the least common ancestor between two nodes on a binary search tree.
 # The least common ancestor is the farthest node from the root that is an
 # ancestor of both nodes. For example, the root is a common ancestor of all
-# nodes on the tree, but if both nodes are descendents of the root's left child,
-# then that left child might be the lowest common ancestor. You can assume that
-# both nodes are in the tree, and the tree itself adheres to all BST properties.
+# nodes on the tree, but if both nodes are descendents of the root's
+# left child, then that left child might be the lowest common ancestor.
+# You can assume that both nodes are in the tree, and the tree itself adheres
+# to all BST properties.
+
 # The function definition should look like question4(T, r, n1, n2), where T is
 # the tree represented as a matrix, where the index of the list is equal to the
 # integer stored in that node and a 1 represents a child node, r is a
 # non-negative integer representing the root, and n1 and n2 are non-negative
 # integers representing the two nodes in no particular order. For example,
 # one test case might be
-#
+
 # question4([[0, 1, 0, 0, 0],
 #            [0, 0, 0, 0, 0],
 #            [0, 0, 0, 0, 0],
@@ -210,9 +211,89 @@ print question3(G)
 #           4)
 # and the answer would be 3.
 
+def traverse(T, r, n1, n2, data):
+    if sum(T[r]) == 0:
+        print "ENTER"
+        return False
+    else:
+        # Check to see if there are children
+        for index, child in enumerate(T[r]):
+            # If there's children, check the value to see if it matches either
+            if child:
+                if index is n1:
+                    data[n1][0] = True
+                    data[n1].append(r)
+                elif index is n2:
+                    data[n2][0] = True
+                    data[n2].append(r)
+                # Continue going deeper into the tree
+                else:
+                    if data[n1][0] is False:
+                        data[n1].append(r)
+                    if data[n2][0] is False:
+                        data[n2].append(r)
+                    traverse(T, index, n1, n2, data)
+                    return data
+        return data
 
-def question4():
-    return
+
+def find_ancestor(data, n1, n2):
+    extract_n1 = data[n1][1:]
+    extract_n2 = data[n2][1:]
+
+    for i in reversed(extract_n1):
+        for j in reversed(extract_n2):
+            if i is j:
+                return i
+
+
+def question4(T, r, n1, n2):
+    # Find the root node
+    try:
+        data = {
+            n1: [False],
+            n2: [False]
+        }
+        # Check for children
+        traverse(T, r, n1, n2, data)
+        return find_ancestor(data, n1, n2)
+    except TypeError:
+        print "Check your parameter inputs to see if they're valid"
+
+
+# # Should be 3
+# print question4([[0, 1, 0, 0, 0],
+#                  [0, 0, 0, 0, 0],
+#                  [0, 0, 0, 0, 0],
+#                  [1, 0, 0, 0, 1],
+#                  [0, 0, 0, 0, 0]],
+#                 3,
+#                 1,
+#                 4)
+#
+# # Should be 0
+# print question4([[0, 1, 1, 0, 0],
+#                  [0, 0, 0, 0, 0],
+#                  [0, 0, 0, 0, 0],
+#                  [1, 0, 0, 0, 1],
+#                  [0, 0, 0, 0, 0]],
+#                 3,
+#                 1,
+#                 2)
+#
+# # Should be 0
+# print question4([[0, 1, 1, 0, 0, 0],
+#                  [0, 0, 0, 0, 0, 0],
+#                  [0, 0, 0, 0, 0, 1],
+#                  [1, 0, 0, 0, 0, 0],
+#                  [0, 0, 0, 0, 0, 0],
+#                  [0, 0, 0, 0, 1, 0]],
+#                 3,
+#                 1,
+#                 4)
+#
+# # Should throw an error
+# print question4("", "", "", "")
 
 # Question 5
 # Find the element in a singly linked list that's m elements from the end.
@@ -220,14 +301,15 @@ def question4():
 # the 3rd element. The function definition should look like question5(ll, m),
 # where ll is the first node of a linked list and m is the
 # "mth number from the end". You should copy/paste the Node class below to use
-# as a representation of a node in the linked list. Return the value of the node
-# at that position.
+# as a representation of a node in the linked list.
+# Return the value of the node at that position.
 
 
 class List_Node(object):
     def __init__(self, value):
         self.value = value
         self.next = None
+
 
 class LinkedList(object):
     def __init__(self, head=None):
@@ -289,19 +371,19 @@ def question5(ll, m):
     return ll.get_position(length - m + 1).value
 
 
-# Should return 3
-ll = test_ll(1, 7)
-m = 3
-print question5(ll, m)
-# Should return 5
-ll = test_ll(1, 8)
-m = 3
-print question5(ll, m)
-# Should return None
-ll = test_ll(1, 7)
-m = 10
-print question5(ll, m)
-# Should return None
-ll = test_ll(1, 7)
-m = 0
-print question5(ll, m)
+# # Should return 3
+# ll = test_ll(1, 7)
+# m = 3
+# print question5(ll, m)
+# # Should return 5
+# ll = test_ll(1, 8)
+# m = 3
+# print question5(ll, m)
+# # Should return None
+# ll = test_ll(1, 7)
+# m = 10
+# print question5(ll, m)
+# # Should return None
+# ll = test_ll(1, 7)
+# m = 0
+# print question5(ll, m)
