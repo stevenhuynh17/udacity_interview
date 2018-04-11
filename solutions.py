@@ -28,22 +28,22 @@ def question1(s, t):
     return True
 
 
-# # Should be True
-# s = "udacity"
-# t = "uc"
-# print question1(s, t)
-# # Should be False: insufficient letters
-# s = "udacity"
-# t = "uu"
-# print question1(s, t)
-# # Should be False: foreign letter
-# s = "udacity"
-# t = "az"
-# print question1(s, t)
-# # Should be False: no string provided
-# s = "udacity"
-# t = ""
-# print question1(s, t)
+# Should be True
+s = "udacity"
+t = "uc"
+print question1(s, t)
+# Should be False: insufficient letters
+s = "udacity"
+t = "uu"
+print question1(s, t)
+# Should be False: foreign letter
+s = "udacity"
+t = "az"
+print question1(s, t)
+# Should be False: no string provided
+s = "udacity"
+t = ""
+print question1(s, t)
 
 # Question 2
 # Given a string a, find the longest palindromic substring contained in a.
@@ -77,18 +77,18 @@ def palindrome(a):
         else:
             return False
 
-# # Should be 'ababa'
-# a = "ababa"
-# print question2(a)
-# # Should be 'ababa'
-# a = "ababad"
-# print question2(a)
-# # Should be 'aba'
-# a = "ababda"
-# print question2(a)
-# # Should be 'rotor'
-# a = "rotoring"
-# print question2(a)
+# Should be 'ababa'
+a = "ababa"
+print question2(a)
+# Should be 'ababa'
+a = "ababad"
+print question2(a)
+# Should be 'aba'
+a = "ababda"
+print question2(a)
+# Should be 'rotor'
+a = "rotoring"
+print question2(a)
 
 # Question 3
 # Given an undirected graph G, find the minimum spanning tree within G.
@@ -155,6 +155,20 @@ class Graph(object):
         return list
 
 
+def find_lowest(node, node_list):
+
+    for index, edge in enumerate(node.edges):
+        if node.edges[index].node_to in node_list:
+            lowest = node.edges[index].value
+            destination = node.edges[index].node_to
+
+            temp = edge.value
+            if temp < lowest:
+                lowest = temp
+                destination = node.edges[index].node_to
+    return [lowest, destination]
+
+
 def question3(G):
     # Build the graph
     setup = Graph()
@@ -165,14 +179,29 @@ def question3(G):
             value = tuple[1]
             setup.insert_edge(value, nodeA, nodeB)
 
+
     adjacency_list = {}
-    # Select a random node, probably the first one
-    # See all available edges and pick the one with the least value
-    # Move to that new node and list all untaken edges with the nodes selected so far
+    # Make a reference list of nodes. Change it into a dictionary?
     nodes = setup.nodes
-    nodes[0].edges
-    # nodes[0].edges[0]
-    # nodes[0].edges[1]
+
+    for index in range(0, len(setup.nodes)):
+        # Pop out the first node
+        if index is 0:
+            current_node = nodes.pop(0)
+        adjacency_list[current_node.value] = []
+        # List out all available edges for that node
+        # Find the lowest value edge
+        if len(nodes):
+            result = find_lowest(current_node, nodes)
+            print result
+            input = (result[1].value, result[0])
+            adjacency_list[current_node.value].append(input)
+        # Pop out the node the selected edge was pointing to
+            current_node = nodes.pop(nodes.index(result[1]))
+    # Repeat
+    # Use reference list to avoid repeat of nodes
+    # Solution occurs when there are no more nodes
+    # Format data into specific format
     return adjacency_list
 
 G = {
@@ -182,7 +211,7 @@ G = {
     }
 
 
-# print question3(G)
+print question3(G)
 
 
 # Question 4
@@ -261,39 +290,39 @@ def question4(T, r, n1, n2):
         print "Check your parameter inputs to see if they're valid"
 
 
-# # Should be 3
-# print question4([[0, 1, 0, 0, 0],
-#                  [0, 0, 0, 0, 0],
-#                  [0, 0, 0, 0, 0],
-#                  [1, 0, 0, 0, 1],
-#                  [0, 0, 0, 0, 0]],
-#                 3,
-#                 1,
-#                 4)
-#
-# # Should be 0
-# print question4([[0, 1, 1, 0, 0],
-#                  [0, 0, 0, 0, 0],
-#                  [0, 0, 0, 0, 0],
-#                  [1, 0, 0, 0, 1],
-#                  [0, 0, 0, 0, 0]],
-#                 3,
-#                 1,
-#                 2)
-#
-# # Should be 0
-# print question4([[0, 1, 1, 0, 0, 0],
-#                  [0, 0, 0, 0, 0, 0],
-#                  [0, 0, 0, 0, 0, 1],
-#                  [1, 0, 0, 0, 0, 0],
-#                  [0, 0, 0, 0, 0, 0],
-#                  [0, 0, 0, 0, 1, 0]],
-#                 3,
-#                 1,
-#                 4)
-#
-# # Should throw an error
-# print question4("", "", "", "")
+# Should be 3
+print question4([[0, 1, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [1, 0, 0, 0, 1],
+                 [0, 0, 0, 0, 0]],
+                3,
+                1,
+                4)
+
+# Should be 0
+print question4([[0, 1, 1, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [1, 0, 0, 0, 1],
+                 [0, 0, 0, 0, 0]],
+                3,
+                1,
+                2)
+
+# Should be 0
+print question4([[0, 1, 1, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 1],
+                 [1, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 1, 0]],
+                3,
+                1,
+                4)
+
+# Should throw an error
+print question4("", "", "", "")
 
 # Question 5
 # Find the element in a singly linked list that's m elements from the end.
@@ -371,19 +400,19 @@ def question5(ll, m):
     return ll.get_position(length - m + 1).value
 
 
-# # Should return 3
-# ll = test_ll(1, 7)
-# m = 3
-# print question5(ll, m)
-# # Should return 5
-# ll = test_ll(1, 8)
-# m = 3
-# print question5(ll, m)
-# # Should return None
-# ll = test_ll(1, 7)
-# m = 10
-# print question5(ll, m)
-# # Should return None
-# ll = test_ll(1, 7)
-# m = 0
-# print question5(ll, m)
+# Should return 3
+ll = test_ll(1, 7)
+m = 3
+print question5(ll, m)
+# Should return 5
+ll = test_ll(1, 8)
+m = 3
+print question5(ll, m)
+# Should return None
+ll = test_ll(1, 7)
+m = 10
+print question5(ll, m)
+# Should return None
+ll = test_ll(1, 7)
+m = 0
+print question5(ll, m)
