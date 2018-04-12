@@ -1,0 +1,33 @@
+question1:
+  I used a dictionary to catalog the individual letters since each letter can
+  be expressed as a unique key and the value can be the number of occurrences.
+  As I cross reference between the two strings via the count of the letters, I
+  used a double for loop that will cause a O(n^2) complexity. I start searching
+  from the largest string just in case the first string is the largest.
+
+question2:
+  I used recursion in this problem cause I'm performing the same steps but with
+  a different length of string. I also created a helper function that checks to
+  see whether the current string is a palindrome or not. The runtime would be
+  O(n^2) since I am iterating through each new string and examining each letter.
+
+question3:
+  I set up a helper function to find the lowest edge value. In order to find
+  the lowest, I use the Python sort method each time new edges are added so
+  whenever I pop the first index, it should always be the lowest value edge.
+  Since the problem is structured as a graph, I treated each edge to have a
+  destination that could lead me to others. There are up to 3 nested for loops
+  so the run time would be around O(n^3),
+
+question4:
+  The setup was meant to be a binary tree so I applied properties of it to get
+  the solution. The main approach was to go through the tree and find the
+  location of the intended nodes. Each node will have a list of parent nodes
+  to be constructed where a helper function helps determine the first
+  occurrence where both nodes' parents match. The runtime would be O(n^2).
+
+question5:
+  Utilizing the properties of a linked list, I figured out the length of the
+  list, then backtrack m number of times to then extract the value. This
+  process should be O(1) since I'm accessing the index and getting the results
+  immediately. 

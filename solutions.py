@@ -30,7 +30,7 @@ def question1(s, t):
 
 # Should be True
 s = "udacity"
-t = "uc"
+t = "tiyc"
 print question1(s, t)
 # Should be False: insufficient letters
 s = "udacity"
@@ -103,114 +103,93 @@ print question2(a)
 # The function definition should be question3(G)
 
 
-class Node(object):
-    def __init__(self, value):
-        self.value = value
-        self.edges = []
+# Sorted parameter help from example on programiz.com
+def take_second(elem):
+    return elem[1]
 
 
-class Edge(object):
-    def __init__(self, value, node_from, node_to):
-        self.value = value
-        self.node_from = node_from
-        self.node_to = node_to
+def find_lowest(edges, visited_nodes):
+    if len(edges):
+        ordered = sorted(edges, key=take_second)
+        for index, data in enumerate(ordered):
+            if data[0] in visited_nodes:
+                continue
+            value = ordered.pop(index)
+            return value
 
 
-class Graph(object):
-    def __init__(self, nodes=[], edges=[]):
-        self.nodes = nodes
-        self.edges = edges
+def question3(graph):
+    try:
+        if graph is {}:
+            return None
+        edge_list = []
+        visited_nodes = []
+        results = []
+        adjacency_list = {}
+        # Select the first node in the dictionary
+        current_node = graph.iterkeys().next()
+        # Initialize the first node to be visited
+        visited_nodes.append(current_node)
+        for index in range(0, len(graph)):
+            # Parse to find their edges and append it to a list
+            # Data would include the parent's node
+            for edge in graph[current_node]:
+                triple = (edge[0], edge[1], current_node)
+                edge_list.append(triple)
 
-    def insert_edge(self, new_edge_val, node_A_val, node_B_val):
-        node_A = None
-        node_B = None
-        for node in self.nodes:
-            if node_A_val == node.value:
-                node_A = node
-            if node_B_val == node.value:
-                node_B = node
-        if node_A is None:
-            node_A = Node(node_A_val)
-            self.nodes.append(node_A)
-        if node_B is None:
-            node_B = Node(node_B_val)
-            self.nodes.append(node_B)
-        AB_edge = Edge(new_edge_val, node_A, node_B)
-        node_A.edges.append(AB_edge)
-        self.edges.append(AB_edge)
+            # Look into the list of edges to see there are any left
+            # Find the edge with the lowest value
+            value = find_lowest(edge_list, visited_nodes)
+            # Switch current_node to the node with the lowest value
+            current_node = value[0]
+            visited_nodes.append(current_node)
+            # Add results to a list of designated edges, nodes
+            results.append(value)
+            # When all nodes are visited, exit loop if necessary
+            if len(visited_nodes) == len(graph):
+                # Create the format as requested
+                for result in results:
+                    adjacency_list[result[0]] = [(result[2], result[1])]
+                break
+            # Repeat, add all edges associated with that node
+        return adjacency_list
+    except AttributeError:
+        print "Check your input"
+    except TypeError:
+        print "Check if input layout is correct"
 
-        # BA_edge = Edge(new_edge_val, node_B, node_A)
-        # node_A.edges.append(BA_edge)
-        # self.edges.append(BA_edge)
-
-    def insert_node(self, new_node_val):
-        new_node = Node(new_node_val)
-        self.nodes.append(new_node)
-
-    def get_edge_list(self):
-        list = []
-        for edge_obj in self.edges:
-            edge = [edge_obj.value, edge_obj.node_from.value, edge_obj.node_to.value]
-            list.append(edge)
-        return list
-
-
-def find_lowest(node, node_list):
-
-    for index, edge in enumerate(node.edges):
-        if node.edges[index].node_to in node_list:
-            lowest = node.edges[index].value
-            destination = node.edges[index].node_to
-
-            temp = edge.value
-            if temp < lowest:
-                lowest = temp
-                destination = node.edges[index].node_to
-    return [lowest, destination]
-
-
-def question3(G):
-    # Build the graph
-    setup = Graph()
-    for node in G:
-        for tuple in G[node]:
-            nodeA = node
-            nodeB = tuple[0]
-            value = tuple[1]
-            setup.insert_edge(value, nodeA, nodeB)
-
-
-    adjacency_list = {}
-    # Make a reference list of nodes. Change it into a dictionary?
-    nodes = setup.nodes
-
-    for index in range(0, len(setup.nodes)):
-        # Pop out the first node
-        if index is 0:
-            current_node = nodes.pop(0)
-        adjacency_list[current_node.value] = []
-        # List out all available edges for that node
-        # Find the lowest value edge
-        if len(nodes):
-            result = find_lowest(current_node, nodes)
-            print result
-            input = (result[1].value, result[0])
-            adjacency_list[current_node.value].append(input)
-        # Pop out the node the selected edge was pointing to
-            current_node = nodes.pop(nodes.index(result[1]))
-    # Repeat
-    # Use reference list to avoid repeat of nodes
-    # Solution occurs when there are no more nodes
-    # Format data into specific format
-    return adjacency_list
-
+# Should print:
+{'A': [('B', 2)],
+ 'B': [('C', 5)]}
 G = {
-        'A': [('B', 2)],
-        'B': [('A', 2), ('C', 5)],
-        'C': [('B', 5)]
-    }
+    'A': [('B', 2)],
+    'B': [('A', 2), ('C', 5)],
+    'C': [('B', 5)]
+}
+print question3(G)
 
+# Should print:
+{'A': [('B', 3)],
+'C': [('D', 2)],
+'B': [('C', 5)],
+'E': [('A', 1)]}
+G = {
+    'A': [('B', 3), ('E', 1)],
+    'B': [('A', 3), ('E', 4), ('C', 5)],
+    'C': [('B', 5), ('E', 6), ('D', 2)],
+    'D': [('C', 2), ('E', 7)],
+    'E': [('A', 1), ('D', 7)]
+}
+print question3(G)
 
+# Should return Error Response, None
+G = {
+    'A': []
+}
+print question3(G)
+
+# Should return Error Response, None
+G = {""}
 print question3(G)
 
 
@@ -290,7 +269,7 @@ def question4(T, r, n1, n2):
         print "Check your parameter inputs to see if they're valid"
 
 
-# Should be 3
+# Should be 3 aka root
 print question4([[0, 1, 0, 0, 0],
                  [0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0],
@@ -300,7 +279,7 @@ print question4([[0, 1, 0, 0, 0],
                 1,
                 4)
 
-# Should be 0
+# Should be 0 aka left side of root
 print question4([[0, 1, 1, 0, 0],
                  [0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0],
@@ -310,7 +289,7 @@ print question4([[0, 1, 1, 0, 0],
                 1,
                 2)
 
-# Should be 0
+# Should be 0 left side with 3 levels
 print question4([[0, 1, 1, 0, 0, 0],
                  [0, 0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0, 1],
@@ -321,7 +300,7 @@ print question4([[0, 1, 1, 0, 0, 0],
                 1,
                 4)
 
-# Should throw an error
+# Should throw an error, None
 print question4("", "", "", "")
 
 # Question 5
